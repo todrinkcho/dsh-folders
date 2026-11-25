@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Project folders",
+    "description": "Project folders in the sidebar: browse real project directories as a grid, enter them, create nested folders, register any folder as a workspace, and open its sessions. With dsh-workspace-mover installed, conversations can be dragged or moved between parent and child folders (the conversation record moves; project files stay put), and the move dialog shows whether the target folder injects memory."
+  }
+}

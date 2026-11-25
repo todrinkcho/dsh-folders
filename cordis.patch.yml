@@ -1,0 +1,3 @@
+- insert:
+    - id: folder-desktop
+      name: '@todrink/dsh-folders'

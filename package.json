@@ -1,0 +1,68 @@
+{
+  "name": "@todrink/dsh-folders",
+  "version": "0.3.2",
+  "type": "module",
+  "description": "Desktop-style folder board for DeepSeek Harness: browse project folders as a grid, create nested folders, register workspaces, open sessions, move conversations between folders (with dsh-workspace-mover), and warn when the target folder has memory injection switched off.",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "README.md",
+    "icon.svg",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18",
+    "dsh": ">=0.2.2-rc.5"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "dsh-bundle",
+    "folders",
+    "workspace",
+    "desktop",
+    "grid",
+    "sidebar",
+    "organize"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "todrink",
+    "url": "https://github.com/todrinkcho"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/todrinkcho/dsh-folders.git"
+  },
+  "homepage": "https://github.com/todrinkcho/dsh-folders#readme",
+  "bugs": {
+    "url": "https://github.com/todrinkcho/dsh-folders/issues"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-ui-workspace",
+        "@deepseek-ai/dsh-api-workspace-controller",
+        "@deepseek-ai/dsh-api-session-controller"
+      ]
+    }
+  }
+}
