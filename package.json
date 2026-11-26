@@ -1,6 +1,6 @@
 {
   "name": "@todrink/dsh-folders",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "type": "module",
   "description": "Desktop-style folder board for DeepSeek Harness: browse project folders as a grid, create nested folders, register workspaces, open sessions, move conversations between folders (with dsh-workspace-mover), and warn when the target folder has memory injection switched off.",
   "exports": {
