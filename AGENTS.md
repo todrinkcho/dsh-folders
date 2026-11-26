@@ -26,35 +26,22 @@ DSH Web GUI 的本地插件 `@todrink/dsh-folders`：侧栏「项目文件夹」
   绝不读记忆内容。读不到/格式坏/字段缺一律按「未知」处理，界面上少显示一行，不许猜、不许兜底成「开」。
 - 安装/卸载走 `plugin_manager` 或 `dsh plugin`，不要手改 profile 的 `package.json`。
 
-## 当前状态 / 待办
+## 当前状态
 
-- 2026-11-20：v0.1.0 完成并安装到 `web` profile；`application: applied`。
-- 2026-11-22：v0.2.0 视觉改版（仅 `client.js` 的样式与卡片结构）：
-  - 全局字号上调（正文 14px、卡片名 17px、标题 30px），卡片放大到 `minmax(240px,1fr)`。
-  - 工作区改成「文件夹」造型：左上角页签 + 主体渐变，按 workspaceId 哈希分配 8 色之一。
-  - 对话从列表行改为卡片网格（状态点、运行/空白标签、相对时间、hover 抬升）。
-  - 页面本身可滚动；窄屏与 `prefers-reduced-motion` 有降级。
-  - 已用真实组件 + React shim 在 Edge 里渲染验证（见本工作区 `_preview/`），
-    未在已登录的 DSH 页面内验证（无浏览器认证），需刷新页面后人工确认。
-- 已验证：模块冒烟（main + sidebar.panellist 注册）、真实 workspace.json 根目录/卡片数据、
-  `dsh --profile web --dump-config` 行、browse 目录后端活动。
-- 2026-11-22：v0.3.0 接入「工作区搬运」（可选）：
-  - `client.js` 新增 `MoveSessionDialog`、卡片「移到…」、拖拽投放、`mover.*` RPC 桥；
-    注入 `connection`，`dsh.client.inject` 同步加了 `@deepseek-ai/dsh-client-connection`。
-  - 端到端验证（独立 `dsh web` 宿主 + 副本会话，三层嵌套工作区）：拖拽 projB→projC、按钮 projB→projA、
-    「登记其他文件夹并移入」新建 projD 并搬入；三条的 `workspace.json` 归属、日志目录、头部 `cwd` 全对得上；
-    未装 mover 时面板正常、入口隐藏。测试件与截图在 `default-workspace/_tmp/2026-11-22-move-adapter/`。
-  - 已知：没装 mover 时首次能力探测会在控制台留一条 405（预期，不影响使用）。
-- 2026-11-22：v0.3.1 记住「记忆插件适配」：
-  - `index.js` 从空壳变成 Host 半径区：`ctx.inject(['connection','webServer'])` 挂 `/folder-desktop` 通道
-    （`authority: 'loopback'`），端点 `memory.scope` 读 `<DSH_HOME>/memory.json`，按记忆插件同一套路径规则
-    （路径边界、`~`/`%USERPROFILE%`/`$HOME` 展开、Windows 不分大小写）算「这个目录会不会被默认关掉记忆」。
-  - `client.js`：移动确认框里目标行带「记忆关」标签，选中后多一行解释 + 恢复提示；全局关闭单独一行；
-    搬完 toast 追加「（该文件夹默认关闭记忆）」。取不到配置就整行不显示。
-  - 验证：Host 自测 `_probe/memory-adapter-harness.mjs` 20 条断言全过（级联/兄弟前缀/`~`/大小写/全局关/坏文件/限流/去重）；
-    真实浏览器（独立 `dsh web` 宿主 + 副本会话 + 三层工作区）跑三态：父目录关→targetB 显示「记忆关」并引用父路径；
-    全局关→只显示全局行且无标签；全开→显示「目标记忆：开」。三态切换只改 `memory.json` 再刷新页面，宿主无需重启。
-    截图与脚本在 `default-workspace/_tmp/2026-11-22-folder-memory-rig/`。
-- UX 评审：3 个问题（登记项被 noise 过滤、创建/登记失败路径、Windows 顶部重复留白）已修复，评审确认可交付。
-- 待办：如需虚拟文件夹（不动磁盘），评估接入 `dsh-better-classifier`；如需拖拽移动目录，
-  先设计安全边界再动。要不要把搬运内核做成自有实现（去掉 mover 依赖），见 README「边界」。
+- 侧栏「项目文件夹」面板 + 桌面式网格、新建嵌套目录、登记工作区、打开会话均已实现。
+- 「移动对话」是可选能力：装了 `dsh-workspace-mover` 才出现入口；没装时面板照常工作，控制台会留一条 405（预期）。
+- Host 半区只读 `<DSH_HOME>/memory.json`，按记忆插件的路径规则（路径边界、`~` / `%USERPROFILE%` / `$HOME` 展开、
+  Windows 不分大小写）判断「这个目录会不会被默认关掉记忆」，界面上给标签与提示。
+- macOS 也按大小写不敏感处理路径（`DSH_FOLDERS_CASE_SENSITIVE=1` 可关，给大小写敏感的 APFS 卷用）。
+
+## 测试
+
+- `node --check client.js` / `node --check index.js`。
+- Host 自测：`_probe/memory-adapter-harness.mjs`（20 条断言，覆盖级联、同前缀兄弟、`~` 展开、大小写、全局关闭、坏文件、限流、去重）。
+- 端到端建议：另起一个 `dsh web` 宿主 + 副本会话 + 三层嵌套工作区，验证拖拽/按钮/新建后移入三条路径的
+  `workspace.json` 归属、日志目录与头部 `cwd`。
+
+## 待办
+
+- 如需虚拟文件夹（不动磁盘），评估接入分类器类插件；如需拖拽移动目录，先设计安全边界再动。
+- 是否把搬运内核做成自有实现（去掉 mover 依赖），见 README「边界」。

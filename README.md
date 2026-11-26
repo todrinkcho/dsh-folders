@@ -81,7 +81,6 @@ Windows 不分大小写）算一遍，再通过 `/folder-desktop` 同源 RPC 交
 ```powershell
 node --check client.js
 node --check index.js
-node E:\path\to\smoke-client.js client.js   # 见仓库外测试脚本，可选
 ```
 
 Host 半区的独立自测（无需 DSH）：`_probe/memory-adapter-harness.mjs`（20 条断言，含父目录级联、
@@ -89,15 +88,17 @@ Host 半区的独立自测（无需 DSH）：`_probe/memory-adapter-harness.mjs`
 
 ## 安装 / 卸载
 
-```powershell
-# 安装（本机）
-dsh plugin --profile web add <本包目录的绝对路径>
+```bash
+# 图形界面：侧栏 插件 → 添加插件 → 填 @todrink/dsh-folders
+# 或者让 agent 调 plugin_manager → install_bundle → @todrink/dsh-folders
+# 或者命令行（本地目录同样可用）
+dsh plugin --profile <profile> add @todrink/dsh-folders
 
 # 可选：解锁「移动对话」
-dsh plugin --profile desktop add dsh-workspace-mover
+dsh plugin --profile <profile> add dsh-workspace-mover
 
 # 卸载
-dsh plugin --profile web remove @todrink/dsh-folders
+dsh plugin --profile <profile> remove @todrink/dsh-folders
 ```
 
 卸载后浏览器 localStorage 里的 `dsh.folder-desktop.root.v1` 可手动清掉，不影响任何项目数据。
